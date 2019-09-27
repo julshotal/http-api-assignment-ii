@@ -7,23 +7,6 @@ const json = require('./jsonResponses.js');
 
 const port = process.env.PORT || process.env.NODE_PORT || 3000;
 
-const urlStruct = {
-  GET: {
-    '/': html.getIndex,
-    '/style.css': html.getCSS,
-    '/getUsers': json.getUsers,
-    '/notReal': json.notReal,
-  },
-  HEAD: {
-    '/getUsers': json.headUsers,
-    '/notReal': json.headNotReal,
-  },
-  POST: {
-    '/addUser': handlePost,
-    '/notReal': json.notReal,
-  },
-};
-
 const handlePost = (request, response, parsedUrl) => {
   if (parsedUrl.pathname === '/addUser') {
     const res = response;
@@ -50,13 +33,29 @@ const handlePost = (request, response, parsedUrl) => {
   }
 };
 
+const urlStruct = {
+  GET: {
+    '/': html.getIndex,
+    '/style.css': html.getCSS,
+    '/getUsers': json.getUsers,
+    '/notReal': json.notReal,
+  },
+  HEAD: {
+    '/getUsers': json.headUsers,
+    '/notReal': json.headNotReal,
+  },
+  POST: {
+    '/addUser': handlePost,
+  },
+};
+
 const onRequest = (request, response) => {
   const parsedUrl = url.parse(request.url);
 
   if(urlStruct[request.method][parsedUrl.pathname]){
     urlStruct[request.method][parsedUrl.pathname](request, response);
   } else {
-    urlStruct[request.method].notReal(request, response);
+    console.log('error');
   }
 };
 
