@@ -19,7 +19,7 @@ const handlePost = (request, response, parsedUrl) => {
     });
 
     request.on('data', (chunk) => {
-      body.push(chunk); 
+      body.push(chunk);
     });
 
     request.on('end', () => {
@@ -28,10 +28,9 @@ const handlePost = (request, response, parsedUrl) => {
 
       json.addUser(request, res, bodyParams);
     });
-  } else {
-    json.notReal(request, response);
   }
 };
+
 
 const urlStruct = {
   GET: {
@@ -39,23 +38,23 @@ const urlStruct = {
     '/style.css': html.getCSS,
     '/getUsers': json.getUsers,
     '/notReal': json.notReal,
+    notFound: json.notFound,
   },
   HEAD: {
     '/getUsers': json.headUsers,
     '/notReal': json.headNotReal,
-  },
-  POST: {
-    '/addUser': handlePost,
   },
 };
 
 const onRequest = (request, response) => {
   const parsedUrl = url.parse(request.url);
 
-  if(urlStruct[request.method][parsedUrl.pathname]){
+  if (request.method === 'POST') {
+    handlePost(request, response, parsedUrl);
+  } else if (urlStruct[request.method][parsedUrl.pathname]) {
     urlStruct[request.method][parsedUrl.pathname](request, response);
   } else {
-    console.log('error');
+    urlStruct[request.method].notFound(request, response);
   }
 };
 

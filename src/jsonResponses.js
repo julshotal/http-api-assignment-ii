@@ -32,13 +32,22 @@ const headUsers = (request, response) => respondEmpty(request, response, 200);
 const notReal = (request, response) => {
   const responseJSON = {
     message: '404 Error',
-    id: 'notFound',
+    id: 'doesNotExist',
   };
 
   return respond(request, response, 404, responseJSON);
 };
 
 const headNotReal = (request, response) => respondEmpty(request, response, 404);
+
+const notFound = (request, response) => {
+  const responseJSON = {
+    message: 'The page you are looking for was not found.',
+    id: 'notFound',
+  };
+
+  respond(request, response, 404, responseJSON);
+};
 
 const addUser = (request, response, body) => {
   const responseJSON = {
@@ -75,4 +84,5 @@ module.exports = {
   headUsers,
   headNotReal,
   addUser,
+  notFound,
 };

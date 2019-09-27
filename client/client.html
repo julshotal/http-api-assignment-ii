@@ -8,6 +8,7 @@
   <script type="text/babel">
   const handleResponse = (xhr, parseResponse) => {
       const content = document.querySelector('#content');
+
       switch(xhr.status) {
         case 200: 
           content.innerHTML = `<b>Success</b>`;
@@ -67,23 +68,19 @@
     };
 
     const sendPost = (e, nameForm) => {
-
       const nameField = nameForm.querySelector('#nameField');
       const ageField = nameForm.querySelector('#ageField');
+      
       const xhr = new XMLHttpRequest();
-
-      const url = userForm.querySelector('#urlField').value;
-      const method = userForm.querySelector('#methodSelect').value;
-
-      xhr.open(method, url);
+      xhr.open('POST', '/addUser');
+      
+  
       xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
       xhr.setRequestHeader ('Accept', 'application/json');
-      xhr.onload = () => handleResponse(xhr);
+      xhr.onload = () => handleResponse(xhr, true);
       
-
       const formData = `name=${nameField.value}&age=${ageField.value}`;
       
-
       xhr.send(formData);
       e.preventDefault();
       return false;
@@ -97,8 +94,8 @@
       const getUsers = (e) => requestUpdate(e, userForm);
       const addUser = (e) => sendPost(e, nameForm);
 
-      nameForm.addEventListener('submit', addUser);
       userForm.addEventListener('submit', getUsers);
+      nameForm.addEventListener('submit', addUser);
 
     };
 
